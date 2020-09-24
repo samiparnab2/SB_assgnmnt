@@ -196,7 +196,7 @@ void large_mult(char p[],char q[],char res[])
     {
         strcat(c1,"0");
     }
-    printf("c0=%s c1=%s c2=%s",c0,c1,c2);
+    //printf("c0=%s c1=%s c2=%s",c0,c1,c2);
     stradd(c0,c1);
     stradd(c0,c2);
     strcpy(res,c0);

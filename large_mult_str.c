@@ -127,13 +127,15 @@ void strsub(char x[],char y[])
 {
     int c=0,d=0,lx=strlen(x),ly=strlen(y),length;
     char result[20],temp[20];
+    
     lx--;
     ly--;
-    if(lx>=ly)
+    length=ly;
+    if(lx>ly)
         length=lx;
-    else
+    else if(ly>lx)
         length=ly;
-    result[length-1]='\0';
+    result[length+1]='\0';
     while(lx>=0 && ly>=0)
     {
         c=(x[lx]-48)-(y[ly]-48)-d;
@@ -200,16 +202,19 @@ void large_mult(char p[],char q[],char res[])
     pad(p,q);
     strncpy(px,p,lb2);
     px[lb2]='\0';
-    strcpy(py,&p[lb2]);
+    strncpy(py,&p[lb2],lb2);
+    py[lb2]='\0';
     strncpy(qx,q,lb2);
     qx[lb2]='\0';
-    strcpy(qy,&q[lb2]);
+    strncpy(qy,&q[lb2],lb2);
+    qy[lb2]='\0';
 
     large_mult(px,qx,c0);
     large_mult(py,qy,c2);
     stradd(px,py);
     stradd(qx,qy);
     large_mult(px,qx,c1);
+    //printf("\nhaga %s %s %s",c0,c1,c2);
     strsub(c1,c0);
     strsub(c1,c2);
     while(length--)
@@ -220,6 +225,7 @@ void large_mult(char p[],char q[],char res[])
     {
         strcat(c1,"0");
     }
+        //printf("\n nigga %s %s %s",c0,c1,c2);
     stradd(c0,c1);
     stradd(c0,c2);
     strcpy(res,c0);
@@ -228,6 +234,12 @@ void large_mult(char p[],char q[],char res[])
 void main()
 {
     char a[20],b[20],c[20];
+    for(int i=0;i<20;i++)
+    {
+        a[i]='\0';
+        b[i]='\0';
+        c[i]='\0';
+    }
     printf("enter 1st no. ");
     scanf("%s",a);
     printf("enter 2nd no. ");

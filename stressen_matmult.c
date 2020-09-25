@@ -7,7 +7,6 @@ void mat_add(int x[][8],int y[][8],int z[][8],int n)
         for(j=0;j<n;j++)
         {
             z[i][j]=x[i][j]+y[i][j];
-            //printf("%d+%d=%d\n",x[i][j],y[i][j],z[i][j]);
         }
             
     }
@@ -20,7 +19,6 @@ void mat_sub(int x[][8],int y[][8],int z[][8],int n)
         for(j=0;j<n;j++)
         {
             z[i][j]=x[i][j]-y[i][j];
-            //printf("%d-%d=%d\n",x[i][j],y[i][j],z[i][j]);
         }
             
     }

@@ -191,7 +191,8 @@ void strsub(char x[],char y[])
 
 void large_mult(char p[],char q[],char res[])
 {
-    int length=strlen(p),lb2,fill;
+    pad(p,q); 
+    int length=strlen(p),lb2,fill,i;
     char c0[20],c1[20],c2[20],px[20],py[20],qx[20],qy[20];
     lb2=length/2;
     if(strlen(p)==1 && strlen(q)==1)
@@ -199,24 +200,24 @@ void large_mult(char p[],char q[],char res[])
          itoa(res,atoi(p)*atoi(q));
          return;
     }
-    pad(p,q);
     strncpy(px,p,lb2);
     px[lb2]='\0';
-    strncpy(py,&p[lb2],lb2);
-    py[lb2]='\0';
+    strncpy(py,&p[lb2],length-lb2);
+    py[length-lb2]='\0';
     strncpy(qx,q,lb2);
     qx[lb2]='\0';
-    strncpy(qy,&q[lb2],lb2);
-    qy[lb2]='\0';
-
+    strncpy(qy,&q[lb2],length-lb2);
+    qy[length-lb2]='\0';
     large_mult(px,qx,c0);
     large_mult(py,qy,c2);
     stradd(px,py);
     stradd(qx,qy);
     large_mult(px,qx,c1);
-    //printf("\nhaga %s %s %s",c0,c1,c2);
+    //printf("\n%s %s %s",c0,c1,c2);
     strsub(c1,c0);
     strsub(c1,c2);
+    if(length&1==1)
+        strcat(c1,"0");
     while(length--)
     {
         strcat(c0,"0");
@@ -225,10 +226,14 @@ void large_mult(char p[],char q[],char res[])
     {
         strcat(c1,"0");
     }
-        //printf("\n nigga %s %s %s",c0,c1,c2);
+    //printf("\n%s %s %s",c0,c1,c2);
     stradd(c0,c1);
     stradd(c0,c2);
     strcpy(res,c0);
+    i=0;
+    while (res[i]=='0')
+        i++;
+    strcpy(res,&res[i]);
     return ;
 }
 void main()

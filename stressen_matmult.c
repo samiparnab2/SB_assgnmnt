@@ -1,5 +1,5 @@
 #include<stdio.h>
-int *mat_add(int x[][8],int y[][8],int z[][8],int n)
+void mat_add(int x[][8],int y[][8],int z[][8],int n)
 {
     int i,j;
     for(i=0;i<n;i++)
@@ -7,12 +7,12 @@ int *mat_add(int x[][8],int y[][8],int z[][8],int n)
         for(j=0;j<n;j++)
         {
             z[i][j]=x[i][j]+y[i][j];
+            printf("%d+%d=%d\n",x[i][j],y[i][j],z[i][j]);
         }
             
     }
-    return z;
 }
-int *mat_sub(int x[][8],int y[][8],int z[][8],int n)
+void mat_sub(int x[][8],int y[][8],int z[][8],int n)
 {
     int i,j;
     for(i=0;i<n;i++)
@@ -20,42 +20,57 @@ int *mat_sub(int x[][8],int y[][8],int z[][8],int n)
         for(j=0;j<n;j++)
         {
             z[i][j]=x[i][j]-y[i][j];
+            printf("%d-%d=%d\n",x[i][j],y[i][j],z[i][j]);
         }
             
     }
-    return z;
 }
 
-void stressen_mat_mult(int x[][8],int y[][8],int res[][8],int n)
+void stressen_mat_mult(int *x,int *y,int *res,int n)
 {
     int i,j,p,q,r,s,t,u,v,t1[8][8],t2[8][8],t3[8][8],nb2=n/2;
     int pm[8][8],qm[8][8],rm[8][8],sm[8][8],tm[8][8],um[8][8],vm[8][8];
+    int inc=8;
     if(n==2)
     {
-        p=(x[0][0]+x[1][1])*(y[0][0]+y[1][1]);
-        q=(x[1][0]+x[1][1])*y[0][0];
-        r=x[0][0]*(y[0][1]-y[1][1]);
-        s=x[1][1]*(y[1][0]-y[0][0]);
-        t=(x[0][0]+x[0][1])*y[1][1];
-        u=(x[1][0]-x[0][0])*(y[0][0]+y[0][1]);
-        v=(x[0][1]-x[1][1])*(y[1][0]+y[1][1]);
-        res[0][0]=p+s-t+v;
-        res[0][1]=r+t;
-        res[1][0]=q+s;
-        res[1][1]=p+r-q+u;
+        p=(x[0]+x[inc+1])*(y[0]+y[inc+1]);
+        q=(x[inc]+x[inc+1])*y[0];
+        r=x[0]*(y[1]-y[inc+1]);
+        s=x[inc+1]*(y[inc]-y[0]);
+        t=(x[0]+x[1])*y[inc+1];
+        u=(x[inc]-x[0])*(y[0]+y[1]);
+        v=(x[1]-x[inc+1])*(y[inc]+y[inc+1]);
+        res[0]=p+s-t+v;
+        res[1]=r+t;
+        res[inc]=q+s;
+        res[inc+1]=p+r-q+u;
         return ;
     }
-    stressen_mat_mult(mat_add(x,x[nb2]+nb2,t1,nb2),mat_add(y,y[nb2]+nb2,t2,nb2),pm,nb2);
-    stressen_mat_mult(mat_add(x[nb2],x[nb2]+nb2,t1,nb2),y,qm,nb2);
-    stressen_mat_mult(x,mat_sub(y+nb2,y[nb2]+nb2,t2,nb2),rm,nb2);
-    stressen_mat_mult(x[nb2]+nb2,mat_sub(y[nb2],y,t2,nb2),sm,nb2);    
-    stressen_mat_mult(mat_add(x,x+nb2,t1,nb2),y[nb2]+nb2,tm,nb2);
-    stressen_mat_mult(mat_sub(x[nb2],x,t1,nb2),mat_add(y,y+nb2,t2,nb2),um,nb2);
-    stressen_mat_mult(mat_sub(x+nb2,x[nb2]+nb2,t1,nb2),mat_add(y[nb2],y[nb2]+nb2,t2,nb2),vm,nb2);
-    mat_add(mat_sub(mat_add(pm,sm,res,nb2),tm,res,nb2),vm,res,nb2);
-    mat_add(rm,tm,res+nb2,nb2);
-    mat_add(qm,sm,res[nb2],nb2);
-    mat_add(mat_sub(mat_add(pm,rm,res[nb2]+nb2,nb2),qm,res[nb2]+nb2,nb2),um,res[nb2]+nb2,nb2);
+    mat_add(x,&x[(nb2*inc)+nb2],t1,nb2);
+    mat_add(y,&y[(nb2*inc)+nb2],t2,nb2);
+    stressen_mat_mult((int *)t1,(int *)t2,pm,nb2);
+    mat_add(&x[(nb2*inc)],&x[(nb2*inc)+nb2],t1,nb2);
+    stressen_mat_mult((int *)t1,y,(int *)qm,nb2);
+    mat_sub(&y[nb2],&y[(nb2*inc)+nb2],t2,nb2);
+    stressen_mat_mult(x,(int *)t2,(int *)rm,nb2);
+    mat_sub(&y[(nb2*inc)],y,t2,nb2);
+    stressen_mat_mult(&x[(nb2*inc)+nb2],(int *)t2,(int *)sm,nb2);    
+    mat_add(x,&x[nb2],t1,nb2);
+    stressen_mat_mult(t1,&y[(nb2*inc)+nb2],(int *)tm,nb2);
+    mat_sub(&x[(nb2*inc)],x,t1,nb2);
+    mat_add(y,&y[nb2],t2,nb2);
+    stressen_mat_mult((int *)t1,(int *)t2,um,nb2);
+    mat_sub(&x[nb2],&x[(nb2*inc)+nb2],t1,nb2);
+    mat_add(&y[(nb2*inc)],&y[(nb2*inc)+nb2],t2,nb2);
+    stressen_mat_mult((int *)t1,(int *)t2,vm,nb2);
+    mat_add(pm,sm,res,nb2);
+    mat_sub(res,tm,res,nb2);
+    mat_add(res,vm,res,nb2);
+    mat_add(rm,tm,&res[nb2],nb2);
+    mat_add(qm,sm,&res[(nb2*inc)],nb2);
+    mat_add(pm,rm,&res[(nb2*inc)+nb2],nb2);
+    mat_sub(&res[(nb2*inc)+nb2],qm,&res[(nb2*inc)+nb2],nb2);
+    mat_add(&res[(nb2*inc)+nb2],um,&res[(nb2*inc)+nb2],nb2);
     return ;
 }
 
@@ -81,7 +96,7 @@ void main()
             scanf("%d",&b[i][j]);
         }
     }
-    stressen_mat_mult(a,b,c,n);
+    stressen_mat_mult((int *)a,(int *)b,(int *)c,n);
     printf("result:-\n");
     for(i=0;i<n;i++)
     {

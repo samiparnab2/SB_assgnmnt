@@ -3,6 +3,31 @@
 #include<stdlib.h>
 #include<string.h>
 
+void pad(char p[],char q[])
+{
+    int n1=strlen(p);
+    int n2=strlen(q);
+    char tmp[10];
+    tmp[0]='\0';
+    if(n1>n2)
+    {
+        for(int i=1;i<=n1-n2;i++)
+        {
+            strcat(tmp,"0");
+        }
+        strcat(tmp,q);
+        strcpy(q,tmp);
+    }   
+    else if(n2>n1)
+    {
+        for(int i=1;i<=n2-n1;i++)
+        {
+            strcat(tmp,"0");
+        }
+        strcat(tmp,p);
+        strcpy(p,tmp);
+    }  
+}
 int len(long x)
 {
     int length=0;
@@ -111,7 +136,7 @@ void strsub(char x[],char y[])
     result[length-1]='\0';
     while(lx>=0 && ly>=0)
     {
-        c=(x[lx]-48)-(y[ly]-48)+d;
+        c=(x[lx]-48)-(y[ly]-48)-d;
         lx--;
         ly--;
         d=0;
@@ -136,7 +161,7 @@ void strsub(char x[],char y[])
         result[length]=48+c;
         length--;
     }
-    while(ly>=0)
+   /* while(ly>=0)
     {
         c=(y[ly]-48)+d;
         ly--;
@@ -148,7 +173,7 @@ void strsub(char x[],char y[])
         }
         result[length]=48+c;
         length--;
-    }
+    }*/
     lx=0;
     while(result[lx]=='0')
     lx++;
@@ -172,6 +197,7 @@ void large_mult(char p[],char q[],char res[])
          itoa(res,atoi(p)*atoi(q));
          return;
     }
+    pad(p,q);
     strncpy(px,p,lb2);
     px[lb2]='\0';
     strcpy(py,&p[lb2]);
@@ -184,10 +210,8 @@ void large_mult(char p[],char q[],char res[])
     stradd(px,py);
     stradd(qx,qy);
     large_mult(px,qx,c1);
-
     strsub(c1,c0);
     strsub(c1,c2);
-
     while(length--)
     {
         strcat(c0,"0");
@@ -196,7 +220,6 @@ void large_mult(char p[],char q[],char res[])
     {
         strcat(c1,"0");
     }
-    //printf("c0=%s c1=%s c2=%s",c0,c1,c2);
     stradd(c0,c1);
     stradd(c0,c2);
     strcpy(res,c0);

@@ -70,3 +70,7 @@ void main()
     gets(&s2[1]);
     lcs(s1,s2);
 }
+/*
+stone
+longest
+*/

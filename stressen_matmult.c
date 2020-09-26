@@ -1,4 +1,24 @@
 #include<stdio.h>
+#include<math.h>
+int max(int a,int b)
+{
+    if(a>b)
+        return a;
+    return b;
+}
+int padSize(int n)
+{
+    return((int)pow(2,(int)log2(n)+1));
+}
+void fill(int m[][8],int n)
+{
+    int i,j;
+    for(i=0;i<n;i++)
+    {
+        for(j=0;j<n;j++)
+        m[i][j]=0;
+    }
+}
 void mat_add(int x[][8],int y[][8],int z[][8],int n)
 {
     int i,j;
@@ -75,9 +95,12 @@ void stressen_mat_mult(int *x,int *y,int *res,int n)
 
 void main()
 {
-    int a[8][8],b[8][8],c[8][8],i,j,m,n;
-    printf("enter size of the matrix(row coloumn)");
-    scanf("%d %d",&m,&n);
+    int a[8][8],b[8][8],c[8][8],i,j,m,n,o,psz;
+    printf("enter no of rows,coloums for 1st matrix and no of coloums for 2nd matrix respectively");
+    scanf("%d %d %d",&m,&n,&o);
+    psz=padSize(max(max(m,n),o));
+    fill(a,psz);
+    fill(b,psz);
     printf("enter 1st matrix\n");
     for(i=0;i<m;i++)
     {
@@ -87,19 +110,19 @@ void main()
             scanf("%d",&a[i][j]);
         }
     }
-    for(i=0;i<m;i++)
+    for(i=0;i<n;i++)
     {
-        for(j=0;j<n;j++)
+        for(j=0;j<o;j++)
         {
             printf("b[%d][%d]= ",i,j);
             scanf("%d",&b[i][j]);
         }
     }
-    stressen_mat_mult((int *)a,(int *)b,(int *)c,n);
+    stressen_mat_mult((int *)a,(int *)b,(int *)c,psz);
     printf("result:-\n");
-    for(i=0;i<n;i++)
+    for(i=0;i<m;i++)
     {
-        for(j=0;j<n;j++)
+        for(j=0;j<o;j++)
         {
             printf("%d ",c[i][j]);
         }
@@ -107,13 +130,43 @@ void main()
     }
 }
 /*
-1 2 3 4
-1 2 3 4
-1 2 3 4
-1 2 3 4
-
-1 1 1 1
-1 1 1 1
-1 1 1 1
-1 1 1 1
+7
+3
+5
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
 */

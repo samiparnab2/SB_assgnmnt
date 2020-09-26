@@ -29,6 +29,7 @@ void stressen_mat_mult(int *x,int *y,int *res,int n)
     int i,j,p,q,r,s,t,u,v,t1[8][8],t2[8][8],t3[8][8],nb2=n/2;
     int pm[8][8],qm[8][8],rm[8][8],sm[8][8],tm[8][8],um[8][8],vm[8][8];
     int inc=8;
+    
     if(n==2)
     {
         p=(x[0]+x[inc+1])*(y[0]+y[inc+1]);

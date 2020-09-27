@@ -1,0 +1,3 @@
+I love c programing
+this is huffman codding
+this is a variable length encoding technique

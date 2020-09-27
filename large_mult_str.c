@@ -163,19 +163,6 @@ void strsub(char x[],char y[])
         result[length]=48+c;
         length--;
     }
-   /* while(ly>=0)
-    {
-        c=(y[ly]-48)+d;
-        ly--;
-        d=0;
-        if(c<0)
-        {
-            d=1;
-            c=c+10;
-        }
-        result[length]=48+c;
-        length--;
-    }*/
     lx=0;
     while(result[lx]=='0')
     lx++;
@@ -191,6 +178,17 @@ void strsub(char x[],char y[])
 
 void large_mult(char p[],char q[],char res[])
 {
+    int minus=1;
+    if(p[0]=='-')
+    {
+        minus=-minus;
+        p[0]='0';
+    }
+    if(q[0]=='-')
+    {
+        minus=-minus;
+        q[0]='0';
+    }
     pad(p,q); 
     int length=strlen(p),lb2,fill,i;
     char c0[20],c1[20],c2[20],px[20],py[20],qx[20],qy[20];
@@ -213,20 +211,18 @@ void large_mult(char p[],char q[],char res[])
     stradd(px,py);
     stradd(qx,qy);
     large_mult(px,qx,c1);
-    //printf("\n%s %s %s",c0,c1,c2);
     strsub(c1,c0);
     strsub(c1,c2);
-    if(length&1==1)
-        strcat(c1,"0");
-    while(length--)
-    {
-        strcat(c0,"0");
-    }
+    lb2=(length+1)/2;
+    length=lb2*2;
     while(lb2--)
     {
         strcat(c1,"0");
     }
-    //printf("\n%s %s %s",c0,c1,c2);
+    while(length--)
+    {
+        strcat(c0,"0");
+    }
     stradd(c0,c1);
     stradd(c0,c2);
     strcpy(res,c0);
@@ -234,6 +230,19 @@ void large_mult(char p[],char q[],char res[])
     while (res[i]=='0')
         i++;
     strcpy(res,&res[i]);
+    if(res[0]=='\0')
+    {
+        res[0]='0';
+        res[1]='\0';
+        return;
+    }
+    if(minus<0)
+    {
+        c0[0]='-';
+        c0[1]='\0';
+        strcat(c0,res);
+        strcpy(res,c0);
+    }
     return ;
 }
 void main()

@@ -1,5 +1,13 @@
 #include<stdio.h>
 #define N 30
+#define INF 2147483640
+void swap(int *p, int *q)
+{
+    int t;
+    t=*p;
+    *p=*q;
+    *q=t;
+}
 void merge(int p[],int start,int mid,int end)
 {
     int a[end-start+1],i,j,k=0;
@@ -51,7 +59,12 @@ void merge_sort(int p[],int start,int end)
 }
 int medofmed(int a[],int start,int end,int n)
 {
-    int i,j,med[N/5],l[N],r[N],k=0,x,inc=0,mom;
+    int i,j,med[N],l[N],k=0,mom,x;
+    if((end-start+1)<=5)
+    {
+        merge_sort(a,start,end);
+        return a[n];
+    }
     for(i=start;i<=end;i+=5)
     {   
         if(i+4<=end)
@@ -64,28 +77,29 @@ int medofmed(int a[],int start,int end,int n)
     }
     merge_sort(med,0,k-1);
     mom=med[k/2];
-    j=0;
-    x=0;
-    for(i=start;i<=end;i++)
+    i=start;
+    j=end;
+    while(i<j)
     {
-        if(a[i]<mom)
-        {
-            l[j]=a[i];
-            j++;
-        }
-        else if(a[i]>mom)
-        {
-            r[x]=a[i];
-            x++;
-        }
+    while (a[i]<mom)
+    {
+        i++;
     }
-    if(n==j)
+    while(a[j]>mom)    
+    {
+        j--;
+    }
+    swap(&a[i],&a[j]);
+    }
+    for(i=start;i<=end;i++)
+        if(a[i]==mom)
+            break;
+    if(n==i)
         return mom;
-    else if(n>j)
-        return medofmed(r,0,(end-start)-j-1,((end-start)-j)/2);
+    else if(n<i)
+        return medofmed(a,start,i-1,n);
     else
-        return medofmed(l,0,j-1,(j-1)/2);
-    
+        return medofmed(a,i+1,end,n);
 }
 void main()
 {
@@ -97,6 +111,7 @@ void main()
         printf("enter %dth element: ",i);
         scanf("%d",&a[i]);
     }
+    a[n]=INF;
     printf("the median is %d ",medofmed(a,0,n-1,n/2));
 }
 /*
@@ -125,4 +140,31 @@ void main()
 38
 37
 35
+
+
+24
+23
+22
+21
+20
+19
+11
+12
+13
+16
+15
+18
+10
+9
+8
+6
+2
+3
+4
+7
+1
+14
+5
+35
+
 */

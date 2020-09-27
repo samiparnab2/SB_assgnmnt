@@ -50,7 +50,7 @@ void merge_sort(int p[],int start,int end)
 }
 void main()
 {
-    int a[20],n;
+    int a[30],n;
     printf("enter no of elements:- ");
     scanf("%d",&n);
     for(int i=0;i<n;i++)
